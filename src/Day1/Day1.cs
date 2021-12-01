@@ -16,9 +16,31 @@ namespace Day1
         internal async Task SolveAsync()
         {
             var input = await GetInputAsync();
+
+            var numberOfDepthIncreases = GetNumberOfDepthIncreases(input);
+
+            Console.WriteLine($"Depth increases from [{input.FirstOrDefault()}]: {numberOfDepthIncreases}");
         }
 
-        private async Task<IEnumerable<int>> GetInputAsync()
+        private static int GetNumberOfDepthIncreases(IEnumerable<int> input)
+        {
+            var counter = 0;
+            var inputAsArray = input.ToArray();
+            for (var i = 0; i < input.Count(); i++)
+            {
+                if (i == 0) continue;
+                var current = inputAsArray[i];
+                var previous = inputAsArray[i - 1];
+                if (current > previous)
+                {
+                    counter++;
+                }
+            }
+
+            return counter;
+        }
+
+        private async Task<IEnumerable<int>> GetInputAsync_WhenIHaveTimeForOAuthAndSessionCookies()
         {
 
             Console.WriteLine($"Retrieving input from {_baseUrl}");
@@ -36,6 +58,19 @@ namespace Day1
             Console.WriteLine($"Received input [{Environment.NewLine}{string.Join(Environment.NewLine, splitStrResponse)}{Environment.NewLine}]");
 
             return null;
+        }
+
+        private static async Task<IEnumerable<int>> GetInputAsync()
+        {
+            Console.WriteLine("Retrieving input from Day1.txt");
+
+            var input = await File.ReadAllTextAsync("Day1.txt");
+
+            var splitStrResponse = input.Trim().Split(Environment.NewLine);
+
+            Console.WriteLine($"Received input [{Environment.NewLine}{string.Join(Environment.NewLine, splitStrResponse)}{Environment.NewLine}]");
+
+            return splitStrResponse.Select(_ => int.Parse(_));
         }
     }
 }
