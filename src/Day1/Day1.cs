@@ -20,6 +20,12 @@ namespace Day1
             var numberOfDepthIncreases = GetNumberOfDepthIncreases(input);
 
             Console.WriteLine($"Depth increases from [{input.FirstOrDefault()}]: {numberOfDepthIncreases}");
+
+            var slidingWindowSums = GetSlidingWindowSums(input);
+
+            var numberOfSumsIncreases = GetNumberOfDepthIncreases(slidingWindowSums);
+
+            Console.WriteLine($"Depth Sum increases from [{slidingWindowSums.FirstOrDefault()}]: {numberOfSumsIncreases}");
         }
 
         private static int GetNumberOfDepthIncreases(IEnumerable<int> input)
@@ -38,6 +44,25 @@ namespace Day1
             }
 
             return counter;
+        }
+
+        private static IEnumerable<int> GetSlidingWindowSums(IEnumerable<int> input)
+        {
+            var inputAsArray = input.ToArray();
+
+            var sums = new List<int>();
+
+            for (int i = 0; i < inputAsArray.Length; i++)
+            {
+                if (i > inputAsArray.Length - 3) break;
+                var elements = inputAsArray.Skip(i).Take(3);
+                var sum = elements.Sum();
+                Console.WriteLine($"Processed window [{string.Join(',', elements)}]: {sum}");
+
+                sums.Add(sum);
+            }
+
+            return sums;
         }
 
         private async Task<IEnumerable<int>> GetInputAsync_WhenIHaveTimeForOAuthAndSessionCookies()
